@@ -1,0 +1,10 @@
+{
+  "name": "stellar-scripts",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@stellar/stellar-sdk": "^12.3.0",
+    "ethers": "^6.17.0",
+    "stellar-hd-wallet": "^1.0.2"
+  }
+}
