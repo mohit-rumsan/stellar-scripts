@@ -10,16 +10,16 @@ const network = (await ask('Network (testnet/mainnet) [testnet]: ')) || 'testnet
 const sponsorSecret = await ask('Sponsor secret key: ');
 
 const makeNew = ((await ask('Generate new wallet keypair? (y/n) [y]: ')) || 'y').toLowerCase();
-let destination;
-let destinationKeypair = null;
+// The new account must sign: it is the source of endSponsoringFutureReserves.
+let destinationKeypair;
 if (makeNew !== 'n') {
   destinationKeypair = Keypair.random();
-  destination = destinationKeypair.publicKey();
-  console.log('New wallet public key:', destination);
+  console.log('New wallet public key:', destinationKeypair.publicKey());
   console.log('New wallet secret key:', destinationKeypair.secret());
 } else {
-  destination = await ask('Destination (new/unfunded) public key: ');
+  destinationKeypair = Keypair.fromSecret(await ask('Destination (new/unfunded) secret key: '));
 }
+const destination = destinationKeypair.publicKey();
 
 const startingBalance = (await ask('Starting XLM balance [0]: ')) || '0';
 
@@ -39,17 +39,17 @@ const tx = new TransactionBuilder(sponsorAccount, {
   .addOperation(
     Operation.createAccount({ destination, startingBalance }),
   )
-  .addOperation(Operation.endSponsoringFutureReserves())
+  .addOperation(Operation.endSponsoringFutureReserves({ source: destination }))
   .setTimeout(30)
   .build();
 
 tx.sign(sponsorKeypair);
-if (destinationKeypair) tx.sign(destinationKeypair);
+tx.sign(destinationKeypair);
 
 try {
   const result = await server.submitTransaction(tx);
   console.log('Wallet sponsored:', destination, '- tx:', result.hash);
-  console.log('Sponsored reserve: 0.5 XLM paid by sponsor');
+  console.log('Sponsored reserve: 1 XLM (2 base reserves) paid by sponsor');
   console.log('Send some XLM later so it can pay fees (see xlm-fund-testnet.js).');
 } catch (err) {
   console.error('Sponsorship failed:', err.response?.data?.extras?.result_codes ?? err.response?.data ?? err.message);

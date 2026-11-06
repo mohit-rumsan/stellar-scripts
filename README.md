@@ -25,6 +25,7 @@ You can also run a script with Node: `node scripts/account-info.js`.
 | `keys-generate` | Generate a random keypair. The account does not exist on-chain until it is funded. | none |
 | `keys-derive [index]` | Get the public and secret key from a secret key or a SEP-0005 mnemonic. Matches Freighter and Lobstr. | none |
 | `keys-find-rahat-index [pubkey] [maxIndex]` | Search indexes 0 to `maxIndex` for a Rahat app wallet and print its secret. Uses the ethers BIP-32 path. | none |
+| `account-create-dev` | Create a new testnet account and fund it with 10,000 XLM from friendbot. Prints the keys. | testnet |
 | `account-info` | Show balances, signers, and thresholds. | testnet / mainnet |
 | `account-create-sponsored` | Create a new account with 0 XLM. A sponsor pays the base reserve. | testnet / mainnet |
 | `xlm-fund-testnet` | Fund a testnet account with friendbot (10,000 XLM) or from your own account. | testnet |
@@ -36,12 +37,11 @@ You can also run a script with Node: `node scripts/account-info.js`.
 
 ## Example: issue a token on testnet
 
-1. Run `./run.sh keys-generate` three times: issuer, distributor, user.
-2. Run `./run.sh xlm-fund-testnet` for each account.
-3. Run `./run.sh asset-issue` with the issuer and distributor secrets.
-4. Run `./run.sh asset-trustline` with the user secret.
-5. Run `./run.sh asset-send` from the distributor to the user.
-6. Run `./run.sh account-info` to check the balances.
+1. Run `./run.sh account-create-dev` three times: issuer, distributor, user. Each account is created and funded.
+2. Run `./run.sh asset-issue` with the issuer and distributor secrets.
+3. Run `./run.sh asset-trustline` with the user secret.
+4. Run `./run.sh asset-send` from the distributor to the user.
+5. Run `./run.sh account-info` to check the balances.
 
 ## Two key derivation schemes
 

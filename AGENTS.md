@@ -17,6 +17,7 @@ Guide for AI agents working in this repo. Small, standalone Node.js (ESM) script
 | New random keypair, offline | `keys-generate` | none |
 | Public/secret key from a secret key or a standard (SEP-0005) mnemonic, as Freighter/Lobstr derive it | `keys-derive [index]` | none |
 | Recover the secret of a **Rahat app** wallet from its public key and mnemonic | `keys-find-rahat-index [pubkey] [maxIndex]` | none |
+| New testnet dev account, already funded with 10,000 XLM (friendbot) | `account-create-dev` | testnet only |
 | Check balances, signers, thresholds | `account-info` | either |
 | Create an account with 0 XLM, reserve paid by a sponsor | `account-create-sponsored` | either |
 | Get testnet XLM (friendbot, or send from a funded account) | `xlm-fund-testnet` | testnet only |
@@ -26,7 +27,7 @@ Guide for AI agents working in this repo. Small, standalone Node.js (ESM) script
 | Send a custom asset (the destination needs a trustline first) | `asset-send` | either |
 | Full sponsorship demo with random throwaway accounts | `demo-sponsor-flow` | testnet only |
 
-Typical order for a new token on testnet: `keys-generate` (issuer, distributor, user) → `xlm-fund-testnet` each → `asset-issue` → `asset-trustline` (user) → `asset-send` → `account-info` to verify.
+Typical order for a new token on testnet: `account-create-dev` three times (issuer, distributor, user) → `asset-issue` → `asset-trustline` (user) → `asset-send` → `account-info` to verify.
 
 ## Key derivation: two schemes
 
