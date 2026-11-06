@@ -6,7 +6,7 @@ Guide for AI agents working in this repo. Small, standalone Node.js (ESM) script
 
 - `scripts/*.js` — one task per file. Line 1 (or 2, after a shebang) is `// desc: ...`. `run.sh` reads that line to build the menu and help. Every new script needs that line.
 - `lib/network.js` — `getNetworkConfig(network)` returns `{ horizonUrl, networkPassphrase }`. Default is testnet. `mainnet` or `public` selects mainnet.
-- `lib/prompt.js` — `ask(question)` reads one line from stdin.
+- `lib/prompt.js` — `ask(question)` reads one line from stdin. `askHidden(question)` does the same without echo, for secrets. Both share one reader, so you can pipe answers, one per line: `printf 'testnet\nG...\n' | node scripts/account-info.js`.
 - `run.sh` — menu (`./run.sh`), help (`./run.sh help`), direct run (`./run.sh <name>`).
 - `help.sh` — same as `./run.sh help`.
 

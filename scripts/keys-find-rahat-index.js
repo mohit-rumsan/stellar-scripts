@@ -4,31 +4,13 @@
 // Mirrors the app's StellarWallet.ts: ethers BIP-32 (secp256k1) at m/44'/148'/n', child privateKey used as ed25519 seed.
 // NOT SEP-0005/SLIP-0010, so Freighter/Lobstr derive different addresses from the same phrase.
 // Usage: node scripts/keys-find-rahat-index.js [publicKey] [maxIndex=1000]
-import { createInterface } from 'node:readline';
+import { askHidden } from '../lib/prompt.js';
 import { Keypair } from '@stellar/stellar-sdk';
 import { HDNodeWallet, Mnemonic } from 'ethers';
 
-function promptHidden(question) {
-  return new Promise((resolve) => {
-    const rl = createInterface({ input: process.stdin, output: process.stdout });
-    const output = rl._writeToOutput;
-    let muted = false;
-    rl._writeToOutput = (chunk) => {
-      if (!muted) output.call(rl, chunk);
-    };
-    rl.question(question, (answer) => {
-      rl._writeToOutput = output;
-      rl.close();
-      process.stdout.write('\n');
-      resolve(answer);
-    });
-    muted = true;
-  });
-}
-
-const pub = (process.argv[2] || (await promptHidden('Public key (G...): '))).trim();
+const pub = (process.argv[2] || (await askHidden('Public key (G...): '))).trim();
 const max = Number(process.argv[3] || 1000);
-const mnemonic = (await promptHidden('Mnemonic: ')).trim().replace(/\s+/g, ' ');
+const mnemonic = (await askHidden('Mnemonic: ')).trim().replace(/\s+/g, ' ');
 
 if (!/^G[A-Z2-7]{55}$/.test(pub)) {
   console.error('Invalid public key.');
